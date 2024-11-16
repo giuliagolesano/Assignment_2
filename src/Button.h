@@ -27,6 +27,6 @@ public:
         lastState = currentState;
         return false;
     }
-}
+};
 
-#endif 
+#endif
