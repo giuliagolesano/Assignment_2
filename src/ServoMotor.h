@@ -11,30 +11,15 @@ private:
     int pin;
 
 public:
-    ServoMotor(int p) {
-        pin=p;
-    }
+    void begin() {}
 
-    void begin() {
-        servo.attach(pin);
-        setAngle(0);
-    }
+    void setAngle(int angle) {}
 
-    void setAngle(int angle) {
-        servo.write(angle);
-    }
+    void open() {}
 
-    void open() {
-        setAngle(90);
-    }
+    void close() {}
 
-    void close() {
-        setAngle(0);
-    }
-
-    void reverse() {
-        setAngle(-90);
-    }
+    void reverse() {}
 };
 
 #endif

@@ -7,26 +7,13 @@ class Button{
 
 private:
     int pin;
-    bool lastState = LOW;
+    bool lastState;
 
 public:
-    Button(int p) {
-        pin = p;
-    }
 
-    void begin() {
-        pinMode(pin, INPUT);
-    }
+    void begin() {}
 
-    bool isPressed() {
-        bool currentState = digitalRead(pin);
-        if(currentState == HIGH && lastState == LOW) {
-            lastState = HIGH;
-            return true;
-        }
-        lastState = currentState;
-        return false;
-    }
+    bool isPressed() {}
 };
 
 #endif

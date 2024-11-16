@@ -8,17 +8,9 @@ class Pir{
     private int pin;
 
 public:
-    Pir(int p) {
-        pin=p;
-    }
+    void begin() {}
 
-    void begin() {
-        pinMode(pin,INPUT);
-    }
-
-    bool isUserDetected() {
-        return digitalRead(pin) == HIGH;
-    }
+    bool isUserDetected() {}
 };
 
 #endif

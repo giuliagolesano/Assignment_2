@@ -8,26 +8,14 @@ class Led {
     private int pin;
 
 public:
-    Led(int p) {
-        pin=p;
-    }
+    
+    void begin() {}
 
-    void begin() {
-        pinMode(pin,OUTPUT);
-        off();
-    }
+    void on() {}
 
-    void on() {
-        digitalWrite(pin, HIGH);
-    }
+    void off() {}
 
-    void off() {
-        digitalWrite(pin,LOW);
-    }
-
-    void change() {
-        digitalWrite(pin, !digitalRead(pin));
-    }
+    void change() {}
 
 };
 
