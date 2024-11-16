@@ -3,6 +3,9 @@
 #include "Button.h"
 #include "Led.h"
 #include "ServoMotor.h"
+#include "Pir.h"
+#include "WasteDetector.h"
+#include "Temp.h"
 
 // put function declarations here:
 //int myFunction(int, int);
@@ -12,15 +15,22 @@ Button closeButton(3);
 Led greenLed(9);
 Led redLed(10);
 ServoMotor door(8);
+Pir pir(7);
+WasteDetector wastedet(6,7);
+Temp temp(A0);
 
 void setup() {
   // put your setup code here, to run once:
   //int result = myFunction(2, 3);
+  Serial.begin(9600);
   openButton.begin();
   closeButton.begin();
   greenLed.begin();
   redLed.begin();
   door.begin();
+  pir.begin();
+  wastedet.begin();
+  temp.begin();
 }
 
 void loop() {
