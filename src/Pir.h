@@ -5,12 +5,13 @@
 
 class Pir{
 
-    private int pin;
+private: 
+    int pin;
 
 public:
-    void begin() {}
-
-    bool isUserDetected() {}
+    Pir(int p);
+    void begin();
+    bool isUserDetected();
 };
 
 #endif

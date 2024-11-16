@@ -1,19 +1,13 @@
 #include "Pir.h"
 
-class Pir{
+Pir::Pir(int p) {
+    pin=p;
+}
 
-    private int pin;
+void Pir::begin() {
+    pinMode(pin,INPUT);
+}
 
-public:
-    Pir(int p) {
-        pin=p;
-    }
-
-    void begin() {
-        pinMode(pin,INPUT);
-    }
-
-    bool isUserDetected() {
-        return digitalRead(pin) == HIGH;
-    }
+bool Pir::isUserDetected() {
+    return digitalRead(pin) == HIGH;
 }

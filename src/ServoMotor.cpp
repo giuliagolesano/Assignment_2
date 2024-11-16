@@ -1,34 +1,26 @@
 #include "ServoMotor.h"
 
-class ServoMotor {
+ServoMotor::ServoMotor(int p) {
+    pin=p;
+}
 
-private:
-    Servo servo;
-    int pin;
+void ServoMotor::begin() {
+    servo.attach(pin);
+    setAngle(0);
+}
 
-public:
-    ServoMotor(int p) {
-        pin=p;
-    }
+void ServoMotor::setAngle(int angle) {
+    servo.write(angle);
+}
 
-    void begin() {
-        servo.attach(pin);
-        setAngle(0);
-    }
+void ServoMotor::open() {
+    setAngle(90);
+}
 
-    void setAngle(int angle) {
-        servo.write(angle);
-    }
+void ServoMotor::close() {
+    setAngle(0);
+}
 
-    void open() {
-        setAngle(90);
-    }
-
-    void close() {
-        setAngle(0);
-    }
-
-    void reverse() {
-        setAngle(-90);
-    }
+void ServoMotor::reverse() {
+    setAngle(-90);
 }

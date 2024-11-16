@@ -5,13 +5,13 @@
 
 class Temp {
 
-    private int pin;
+private: 
+    int pin;
 
 public: 
-
-    void begin() {}
-
-    float getTemperature() {}
+    Temp(int p);
+    void begin();
+    float getTemperature();
 };
 
 #endif

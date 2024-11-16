@@ -1,27 +1,20 @@
 #include "Button.h"
 
-class Button{
+Button::Button(int p) {
+    pin = p;
+    lastState = LOW;
+}
 
-private:
-    int pin;
-    bool lastState = LOW;
+void Button::begin() {
+    pinMode(pin, INPUT);
+}
 
-public:
-    Button(int p) {
-        pin = p;
+bool Button::isPressed() {
+    bool currentState = digitalRead(pin);
+    if(currentState == HIGH && lastState == LOW) {
+        lastState = HIGH;
+        return true;
     }
-
-    void begin() {
-        pinMode(pin, INPUT);
-    }
-
-    bool isPressed() {
-        bool currentState = digitalRead(pin);
-        if(currentState == HIGH && lastState == LOW) {
-            lastState = HIGH;
-            return true;
-        }
-        lastState = currentState;
-        return false;
-    }
+    lastState = currentState;
+    return false;
 }

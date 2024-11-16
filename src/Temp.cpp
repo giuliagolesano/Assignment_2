@@ -1,21 +1,15 @@
 #include "Temp.h"
 
-class Temp {
+Temp::Temp(int p) {
+    pin=p;
+}
 
-    private int pin;
+void Temp::begin() {
+    pinMode(pin, INPUT);
+}
 
-public: 
-    Temp(int p) {
-        pin=p;
-    }
-
-    void begin() {
-        pinMode(pin, INPUT);
-    }
-
-    float getTemperature() {
-        int rawValue = analogRead(pin);
-        float voltage = rawValue * (5.0 / 1023.0);
-        return (voltage - 0.5) * 100;
-    }
+float Temp::getTemperature() {
+    int rawValue = analogRead(pin);
+    float voltage = rawValue * (5.0 / 1023.0);
+    return (voltage - 0.5) * 100;
 }

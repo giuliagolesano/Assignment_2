@@ -10,10 +10,9 @@ private:
     bool lastState;
 
 public:
-
-    void begin() {}
-
-    bool isPressed() {}
+    Button(int p);
+    void begin();
+    bool isPressed();
 };
 
 #endif

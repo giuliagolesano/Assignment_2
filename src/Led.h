@@ -5,18 +5,15 @@
 
 class Led {
 
-    private int pin;
+private: 
+    int pin;
 
 public:
-    
-    void begin() {}
-
-    void on() {}
-
-    void off() {}
-
-    void change() {}
-
+    Led(int p);
+    void begin();
+    void on();
+    void off();
+    void change();
 };
 
 #endif

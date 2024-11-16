@@ -11,15 +11,12 @@ private:
     int pin;
 
 public:
-    void begin() {}
-
-    void setAngle(int angle) {}
-
-    void open() {}
-
-    void close() {}
-
-    void reverse() {}
+    Temp(int pin);
+    void begin();
+    void setAngle(int angle);
+    void open();
+    void close();
+    void reverse();
 };
 
 #endif

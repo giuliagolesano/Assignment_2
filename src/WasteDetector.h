@@ -10,10 +10,9 @@ private:
     int echoPin;
 
 public:
-
-    void begin() { }
-
-    long getDistance() {}
+    WasteDetector(int trig, int echo);
+    void begin();
+    long getDistance();
 };
 
 #endif

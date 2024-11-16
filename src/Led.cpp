@@ -1,29 +1,22 @@
 #include "Led.h"
 
-class Led {
+Led::Led(int p) {
+    pin=p;
+}
 
-    private int pin;
+void Led::begin() {
+    pinMode(pin,OUTPUT);
+    off();
+}
 
-public:
-    Led(int p) {
-        pin=p;
-    }
+void Led::on() {
+    digitalWrite(pin, HIGH);
+}
 
-    void begin() {
-        pinMode(pin,OUTPUT);
-        off();
-    }
+void Led::off() {
+    digitalWrite(pin,LOW);
+}
 
-    void on() {
-        digitalWrite(pin, HIGH);
-    }
-
-    void off() {
-        digitalWrite(pin,LOW);
-    }
-
-    void change() {
-        digitalWrite(pin, !digitalRead(pin));
-    }
-
+void Led::change() {
+    digitalWrite(pin, !digitalRead(pin));
 }
