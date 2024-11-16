@@ -11,7 +11,7 @@ private:
     int pin;
 
 public:
-    Temp(int pin);
+    ServoMotor(int pin);
     void begin();
     void setAngle(int angle);
     void open();
