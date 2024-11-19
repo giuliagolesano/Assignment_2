@@ -37,3 +37,7 @@ TempState Temp::getState() {
 void Temp::setState(TempState newState) {
     currentState = newState;
 }
+
+bool Temp::isDanger() {
+    return currentState == DANGER;
+}

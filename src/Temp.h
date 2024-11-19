@@ -21,6 +21,7 @@ public:
     float getTemperature();
     TempState getState();
     void setState(TempState newState);
+    bool isDanger();
 };
 
 #endif

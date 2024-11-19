@@ -26,6 +26,9 @@ LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 
 unsigned long startTime;
 unsigned long tsleep = 10000;
+unsigned long time;
+unsigned long T1 = 3000;
+unsigned long T2 = 1000;
 bool sleep = false;
 
 void available();
@@ -54,6 +57,7 @@ void setup() {
 }
 
 void loop() {
+  /*
   if(pir.isUserDetected()){
     if(sleep) {
       wakeUp();
@@ -63,7 +67,39 @@ void loop() {
     if(millis() - startTime >= tsleep){
       enterSleep();
     }
+  }*/
+
+ if(openButton.isPressed() && !wastedet.isfull() && pir.isUserDetected() && !temp.isDanger()) {
+  door.open();
+  door.setState(DOOR_OPENING);
+
+  lcd.setCursor(0,0);
+  lcd.print("PRESS CLOSE WHEN DONE");
+  time = millis();
+  door.setState(DOOR_OPEN);
+
+  if(closeButton.isPressed() || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
+    door.close();
+    door.setState(DOOR_CLOSING);
+
+    if(wastedet.isfull()) {
+      lcd.setCursor(0,0);
+      lcd.print("CONTAINER FULL");
+      greenLed.off();
+      redLed.on();
+    }else if(temp.isDanger()){
+      lcd.setCursor(0,0);
+      lcd.print("PROBLEM DETECTED");
+      greenLed.off();
+      redLed.on();
+    }else{
+      lcd.setCursor(0,0);
+      lcd.print("WASTE RECEIVED");
+      delay(T2);
+      door.setState(DOOR_CLOSED);
+    }
   }
+ }
 }
 
 void available() {

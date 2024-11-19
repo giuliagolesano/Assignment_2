@@ -43,3 +43,12 @@ void WasteDetector::setState(binState newState) {
     currentState=newState;
 }
 
+bool WasteDetector::isfull() {
+    if(getDistance() <= D1) {
+        setState(FULL);
+        return true;
+    }else{
+        return false;
+    }
+}
+

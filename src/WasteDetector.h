@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 
+unsigned long D1 
+
 enum binState {
     EMPTY,
     FILLING,
@@ -23,6 +25,7 @@ public:
     binState getState();
     void setState(binState newState);
     long getDistance();
+    bool isfull();
 };
 
 #endif
