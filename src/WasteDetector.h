@@ -3,8 +3,6 @@
 
 #include <Arduino.h>
 
-unsigned long D1 
-
 enum binState {
     EMPTY,
     FILLING,

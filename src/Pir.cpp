@@ -41,4 +41,5 @@ bool Pir::isUserDetected() {
         setState(ABSENCE);
         return false;
     }
+    return false;
 }

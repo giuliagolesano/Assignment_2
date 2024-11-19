@@ -1,5 +1,7 @@
 #include "WasteDetector.h"
 
+int D1 =300;
+
 /*
 * Constructor.
 */
