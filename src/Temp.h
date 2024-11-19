@@ -7,7 +7,7 @@ enum TempState {
     OKAY,
     DANGER,
     RESTORE
-}
+};
 
 class Temp {
 

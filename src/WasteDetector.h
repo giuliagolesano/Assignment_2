@@ -8,7 +8,7 @@ enum binState {
     FILLING,
     FULL,
     EMPTYING
-}
+};
 
 class WasteDetector {
 

@@ -35,3 +35,7 @@ void Led::off() {
 void Led::change() {
     digitalWrite(pin, !digitalRead(pin));
 }
+
+bool Led::isOn() {
+    return digitalRead(pin) == HIGH;
+}

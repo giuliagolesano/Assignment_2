@@ -6,7 +6,7 @@
 enum PirState {
     PRESENT,
     ABSENCE
-}
+};
 
 class Pir{
 

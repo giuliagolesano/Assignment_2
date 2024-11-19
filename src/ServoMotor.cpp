@@ -53,7 +53,7 @@ void ServoMotor::reverse() {
     if(currentState == DOOR_CLOSED || currentState == DOOR_OPEN){
         currentState = DOOR_REVERSING;
         setAngle(180);
-        delay(1000)
+        delay(1000);
         currentState = DOOR_CLOSED;
     }
 }

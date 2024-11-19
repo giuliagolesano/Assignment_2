@@ -25,10 +25,14 @@ Temp temp(A0);
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4);
 
 unsigned long startTime;
+unsigned long tsleep = 10000;
+bool sleep = false;
+
+void available();
+void wakeUp();
+void enterSleep();
 
 void setup() {
-  // put your setup code here, to run once:
-  //int result = myFunction(2, 3);
   Serial.begin(9600);
 
   openButton.begin();
@@ -39,26 +43,60 @@ void setup() {
   pir.begin();
   wastedet.begin();
   temp.begin();
-
-  //enableInterrupt(openButton, wakeUp, RISING);
-  //enableInterrupt(closeButton, wakeUp, RISING);
-
-  startTime = millis();
-
   lcd.init();
   lcd.backlight();
   lcd.begin(20,4);
 
-  //Timer1.initialize(1000000);
-  //Timer1.attachInterrupt(ledManagement);
-  
+  available();
+  startTime = millis();
+
+  enableInterrupt(7, wakeUp, RISING);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if(pir.isUserDetected()){
+    if(sleep) {
+      wakeUp();
+    }
+    startTime = millis();
+  }else{
+    if(millis() - startTime >= tsleep){
+      enterSleep();
+    }
+  }
 }
 
-/* put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}*/
+void available() {
+  greenLed.on();
+  lcd.backlight();
+  lcd.setCursor(0,0);
+  lcd.print("PRESS OPEN TO ENTER WASTE");
+  delay(2000);
+}
+
+void enterSleep() {
+  sleep = true;
+
+  lcd.clear();
+  lcd.noBacklight();
+
+  if(greenLed.isOn()) {
+    redLed.off();
+  }else if(redLed.isOn()) {
+    greenLed.off();
+  }
+
+  Serial.flush();
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+  sleep_enable();
+  sleep_mode();
+
+  sleep_disable();
+}
+
+void wakeUp() {
+  sleep = false;
+
+  lcd.backlight();
+  available();
+}

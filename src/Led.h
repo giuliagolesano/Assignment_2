@@ -14,6 +14,7 @@ public:
     void on();
     void off();
     void change();
+    bool isOn();
 };
 
 #endif

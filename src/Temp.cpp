@@ -27,7 +27,7 @@ float Temp::getTemperature() {
 /*
 * Method to get the state.
 */
-void Temp::getState() {
+TempState Temp::getState() {
     return currentState;
 }
 

@@ -25,7 +25,7 @@ void Pir::setState(PirState newState) {
 /*
 * Method to get the state.
 */
-void Pir::getState() {
+PirState Pir::getState() {
     return currentState;
 }
 
@@ -35,8 +35,10 @@ void Pir::getState() {
 bool Pir::isUserDetected() {
     if(digitalRead(pin) == HIGH && currentState == ABSENCE){
         setState(PRESENT);
+        return true;
     }
     if(digitalRead(pin) == LOW && currentState == PRESENT){
         setState(ABSENCE);
+        return false;
     }
 }
