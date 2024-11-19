@@ -1,6 +1,7 @@
 #include "WasteDetector.h"
 
 int D1 =300;
+const float vs = 331.5 + 0.6*20;
 
 /*
 * Constructor.
@@ -23,12 +24,18 @@ void WasteDetector::begin() {
 * Method to get the distance.
 */
 long WasteDetector::getDistance() {
-    digitalWrite(triggerPin, LOW);
-    delayMicroseconds(2);
-    digitalWrite(triggerPin, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(triggerPin, LOW);
-    return pulseIn(echoPin, HIGH) / 58;
+
+    digitalWrite(triggerPin,LOW);
+    delayMicroseconds(3);
+    digitalWrite(triggerPin,HIGH);
+    delayMicroseconds(5);
+    digitalWrite(triggerPin,LOW);
+
+    float tUS = pulseIn(echoPin, HIGH);
+    float t = tUS / 1000.0 / 1000.0 / 2;
+    float d = t*vs;
+    return d;
+
 }
 
 /*

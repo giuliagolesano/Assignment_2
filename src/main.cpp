@@ -54,9 +54,18 @@ void setup() {
   startTime = millis();
 
   enableInterrupt(7, wakeUp, RISING);
+
 }
 
 void loop() {
+  
+  if(digitalRead(2) == HIGH) {
+    door.open();
+  }
+  if(digitalRead(3) == HIGH) {
+    door.setAngle(0);
+  }
+
   /*
   if(pir.isUserDetected()){
     if(sleep) {
@@ -67,18 +76,21 @@ void loop() {
     if(millis() - startTime >= tsleep){
       enterSleep();
     }
-  }*/
+  }
 
- if(openButton.isPressed() && !wastedet.isfull() && pir.isUserDetected() && !temp.isDanger()) {
+ if(digitalRead(3) == HIGH && !wastedet.isfull() && pir.isUserDetected() && !temp.isDanger()) {
+  redLed.on();
   door.open();
   door.setState(DOOR_OPENING);
 
+  lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("PRESS CLOSE WHEN DONE");
   time = millis();
   door.setState(DOOR_OPEN);
 
-  if(closeButton.isPressed() || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
+  if(digitalRead(2) == HIGH || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
+    redLed.off();
     door.close();
     door.setState(DOOR_CLOSING);
 
@@ -99,7 +111,8 @@ void loop() {
       door.setState(DOOR_CLOSED);
     }
   }
- }
+ }*/
+
 }
 
 void available() {

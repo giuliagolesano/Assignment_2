@@ -19,11 +19,6 @@ void Button::begin() {
 * Method to capture the pression of the button.
 */
 bool Button::isPressed() {
-    bool currentState = digitalRead(pin);
-    if(currentState == HIGH && lastState == LOW) {
-        lastState = HIGH;
-        return true;
-    }
-    lastState = currentState;
-    return false;
+    if(digitalRead(pin) == HIGH) return true;
+    else return false;
 }
