@@ -1,7 +1,8 @@
-#ifndef TEMP_H
-#define TEMP_H
+#ifndef TEMPTASK_H
+#define TEMPTASK_H
 
 #include <Arduino.h>
+#include "Task.h"
 
 enum TempState {
     OKAY,
@@ -9,19 +10,24 @@ enum TempState {
     RESTORE
 };
 
-class Temp {
+class TempTask : public Task{
 
 private: 
     int pin;
     TempState currentState;
     unsigned long dangerStartTime;
+    float currentTemperature;
 
 public: 
-    Temp(int p);
-    void begin();
-    float getTemperature();
-    TempState getState();
+    TempTask(int p);
+
+    void init() override;
+    void tick() override;
+
     void setState(TempState newState);
+    TempState getState();
+
+    float getTemperature();
     bool isDanger();
     void control();
 };

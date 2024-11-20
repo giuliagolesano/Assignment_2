@@ -1,24 +1,30 @@
-#ifndef PIR_H
-#define PIR_H
+#ifndef USERDETECTIONTASK_H
+#define USERDETECTIONTASK_H
 
 #include <Arduino.h>
+#include "Task.h"
 
 enum PirState {
     PRESENT,
     ABSENCE
 };
 
-class Pir{
+class UserDetectionTask : public Task{
 
 private: 
     int pin;
     PirState currentState;
+    bool userDetected;
 
 public:
-    Pir(int p);
+    UserDetectionTask(int p);
+
     PirState getState();
     void setState(PirState newState);
-    void begin();
+
+    void init();
+    void tick();
+    
     bool isUserDetected();
 };
 

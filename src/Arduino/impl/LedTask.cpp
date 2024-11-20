@@ -1,41 +1,46 @@
-#include "Led.h"
+#include "LedTask.h"
+#include <Arduino.h>
 
 /*
 * Constructor.
 */
-Led::Led(int p) {
-    pin=p;
+LedTask::LedTask(int p) {
+    this->pin=p;
 }
 
 /*
 * Method to initialize the led.
 */
-void Led::begin() {
+void LedTask::init() {
     pinMode(pin,OUTPUT);
     off();
+}
+
+void LedTask::tick() {
+    
 }
 
 /*
 * Method to set the led on.
 */
-void Led::on() {
+void LedTask::on() {
     digitalWrite(pin, HIGH);
 }
 
 /*
 * Method to set the led off.
 */
-void Led::off() {
+void LedTask::off() {
     digitalWrite(pin,LOW);
 }
 
 /*
 * Method to change the led on/off.
 */
-void Led::change() {
+void LedTask::change() {
     digitalWrite(pin, !digitalRead(pin));
 }
 
-bool Led::isOn() {
+bool LedTask::isOn() {
     return digitalRead(pin) == HIGH;
 }

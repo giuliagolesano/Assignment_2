@@ -1,4 +1,4 @@
-#include "WasteDetector.h"
+#include "WasteDetectorTask.h"
 
 int D1 =300;
 const float vs = 331.5 + 0.6*20;
@@ -6,24 +6,25 @@ const float vs = 331.5 + 0.6*20;
 /*
 * Constructor.
 */
-WasteDetector::WasteDetector(int trig, int echo) {
-    triggerPin=trig;
-    echoPin=echo;
-    currentState=EMPTY;
+WasteDetectorTask::WasteDetectorTask(int trig, int echo) {
+    this->triggerPin=trig;
+    this->echoPin=echo;
+    this->currentState=EMPTY;
 }
 
 /*
 * Method to initialize the proximity sensor.
 */
-void WasteDetector::begin() {
+void WasteDetectorTask::init() {
     pinMode(triggerPin, OUTPUT);
     pinMode(echoPin, INPUT);
+    isFull = false;
 }
 
 /*
 * Method to get the distance.
 */
-long WasteDetector::getDistance() {
+long WasteDetectorTask::getDistance() {
     digitalWrite(triggerPin,LOW);
     delayMicroseconds(3);
     digitalWrite(triggerPin,HIGH);
@@ -35,27 +36,28 @@ long WasteDetector::getDistance() {
     return d;
 }
 
-void WasteDetector::control() {
+void WasteDetectorTask::tick() {
     if(getDistance() <= D1) {
         setState(FULL);
+        isFull = true;
     }
 }
 
 /*
 * Method to get the state.
 */
-binState WasteDetector::getState() {
+binState WasteDetectorTask::getState() {
     return currentState;
 }
 
 /*
 * Method to set the state.
 */
-void WasteDetector::setState(binState newState) {
+void WasteDetectorTask::setState(binState newState) {
     currentState=newState;
 }
 
-bool WasteDetector::isfull() {
-    return currentState == FULL;
+bool WasteDetectorTask::isfull() {
+    return isFull;
 }
 

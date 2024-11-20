@@ -4,24 +4,24 @@
 #include <EnableInterrupt.h>
 #include <LiquidCrystal_I2C.h>
 
-#include "Button.h"
-#include "Led.h"
-#include "ServoMotor.h"
-#include "Pir.h"
-#include "WasteDetector.h"
-#include "Temp.h"
+#include "ButtonTask.h"
+#include "LedTask.h"
+#include "DoorTask.h"
+#include "UserDetectionTask.h"
+#include "WasteDetectorTask.h"
+#include "TempTask.h"
 
 #define EMPTY_COMMAND "EMPTY"
 #define RESTORE_COMMAND "RESTORE"
 
-Button openButton(2);
-Button closeButton(3);
-Led greenLed(10);
-Led redLed(9);
-ServoMotor door(8);
-Pir pir(7);
-WasteDetector wastedet(5, 6);
-Temp temp(A0);
+ButtonTask* openButton;
+ButtonTask* closeButton;
+LedTask* greenLed;
+LedTask* redLed;
+DoorTask* door;
+UserDetectionTask* pir;
+WasteDetectorTask* wastedet;
+TempTask* temp;
 
 LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27, 20, 4);
 
@@ -40,14 +40,22 @@ void enterSleep();
 void setup() {
     Serial.begin(9600);
 
-    openButton.begin();
-    closeButton.begin();
-    greenLed.begin();
-    redLed.begin();
-    door.begin();
-    pir.begin();
-    wastedet.begin();
-    temp.begin();
+    openButton = new ButtonTask(2);
+    closeButton = new ButtonTask(3); 
+    greenLed = new LedTask(10); 
+    redLed = new LedTask(9);
+    door = new DoorTask(8);
+    temp = new TempTask(A0); 
+    pir = new UserDetectionTask(7);
+    wastedet = new WasteDetectorTask(5,6);
+
+    openButton->init();
+    closeButton->init();
+    greenLed->init();
+    redLed->init();
+    door->init();
+    temp->init();
+
     lcd.init();
     lcd.backlight();
     lcd.begin(20, 4);
@@ -59,62 +67,62 @@ void setup() {
 }
 
 void loop() {
-    temp.control();
-    wastedet.control();
+    temp->tick();
+    wastedet->tick();
 
     Serial.print("TEMP:");
-    Serial.print(temp.getTemperature());
+    Serial.print(temp->getTemperature());
     Serial.print(";WASTE:");
-    Serial.println(wastedet.getDistance());
+    Serial.println(wastedet->getDistance());
 
     if (Serial.available() > 0) {
         String command = Serial.readStringUntil('\n');
         command.trim();
 
-        if (command == EMPTY_COMMAND && wastedet.isfull()) {
-            door.reverse();
+        if (command == EMPTY_COMMAND && wastedet->isfull()) {
+            door->reverse();
             Serial.println("ACTION:EMPTY_EXECUTED");
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print("EMPTYING");
             delay(T3);
             available();
-            wastedet.setState(EMPTY);
-        } else if (command == RESTORE_COMMAND && temp.isDanger()) {
+            wastedet->setState(EMPTY);
+        } else if (command == RESTORE_COMMAND && temp->isDanger()) {
             Serial.println("ACTION:RESTORE_EXECUTED");
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print("RESTORING");
             delay(T3);
             available();
-            temp.setState(OKAY);
+            temp->setState(OKAY);
         }
     }
 
-    if (pir.isUserDetected()) {
-        if (openButton.isPressed() && !wastedet.isfull() && !temp.isDanger()) {
-            door.open();
-            wastedet.setState(FILLING);
+    if (pir->isUserDetected()) {
+        if (openButton->isPressed() && !wastedet->isfull() && !temp->isDanger()) {
+            door->open();
+            wastedet->setState(FILLING);
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print("PRESS CLOSE WHEN DONE");
             time = millis();
 
-            if (closeButton.isPressed() || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
-                door.close();
+            if (closeButton->isPressed() || (millis() - time >= T1) || wastedet->isfull() || temp->isDanger()) {
+                door->close();
 
-                if (wastedet.isfull()) {
+                if (wastedet->isfull()) {
                     lcd.clear();
                     lcd.setCursor(0, 0);
                     lcd.print("CONTAINER FULL");
-                    greenLed.off();
-                    redLed.on();
-                } else if (temp.isDanger()) {
+                    greenLed->off();
+                    redLed->on();
+                } else if (temp->isDanger()) {
                     lcd.clear();
                     lcd.setCursor(0, 0);
                     lcd.print("PROBLEM DETECTED");
-                    greenLed.off();
-                    redLed.on();
+                    greenLed->off();
+                    redLed->on();
                 } else {
                     lcd.clear();
                     lcd.setCursor(0, 0);
@@ -132,7 +140,7 @@ void loop() {
 }
 
 void available() {
-    greenLed.on();
+    greenLed->on();
     lcd.clear();
     lcd.backlight();
     lcd.setCursor(0, 0);
@@ -146,10 +154,10 @@ void enterSleep() {
     lcd.clear();
     lcd.noBacklight();
 
-    if (greenLed.isOn()) {
-        redLed.off();
-    } else if (redLed.isOn()) {
-        greenLed.off();
+    if (greenLed->isOn()) {
+        redLed->off();
+    } else if (redLed->isOn()) {
+        greenLed->off();
     }
 
     Serial.flush();

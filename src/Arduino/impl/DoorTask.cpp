@@ -1,32 +1,36 @@
-#include "ServoMotor.h"
+#include "DoorTask.h"
 
 /*
 * Constructor.
 */
-ServoMotor::ServoMotor(int p) {
-    pin=p;
-    currentState = DOOR_CLOSED;
+DoorTask::DoorTask(int p) {
+    this->pin=p;
+    this->currentState = DOOR_CLOSED;
 }
 
 /*
 * Method to initialize the servo motor.
 */
-void ServoMotor::begin() {
+void DoorTask::init() {
     servo.attach(pin);
     setAngle(0);
+}
+
+void DoorTask::tick() {
+
 }
 
 /*
 * Method to set the angle of the servo motor.
 */
-void ServoMotor::setAngle(int angle) {
+void DoorTask::setAngle(int angle) {
     servo.write(angle);
 }
 
 /*
 * Method to open the door.
 */
-void ServoMotor::open() {
+void DoorTask::open() {
     if(currentState == DOOR_CLOSED || currentState == DOOR_CLOSING){
         currentState = DOOR_OPENING;    
         setAngle(90);
@@ -38,7 +42,7 @@ void ServoMotor::open() {
 /*
 * Method to close the door.
 */
-void ServoMotor::close() {
+void DoorTask::close() {
     if(currentState == DOOR_OPEN || currentState == DOOR_OPENING){
         currentState = DOOR_CLOSING;
         setAngle(0);
@@ -49,7 +53,7 @@ void ServoMotor::close() {
 /*
 * Method to reverse the door and empty the waste disposal system.
 */
-void ServoMotor::reverse() {
+void DoorTask::reverse() {
     if(currentState == DOOR_CLOSED || currentState == DOOR_OPEN){
         currentState = DOOR_REVERSING;
         setAngle(180);
@@ -61,20 +65,14 @@ void ServoMotor::reverse() {
 /*
 * Method to get the state.
 */
-DoorState ServoMotor::getState() {
+DoorState DoorTask::getState() {
     return currentState;
 }
 
 /*
 * Method to set the state.
 */
-void ServoMotor::setState(DoorState newState) {
+void DoorTask::setState(DoorState newState) {
     currentState = newState;
 }
 
-/*
-* Method to .
-*/
-void ServoMotor::update() {
-
-}

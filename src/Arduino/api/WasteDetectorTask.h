@@ -1,7 +1,8 @@
-#ifndef WASTEDETECTOR_H
-#define WASTEDETECTOR_H
+#ifndef WASTEDETECTORTASK_H
+#define WASTEDETECTORTASK_H
 
 #include <Arduino.h>
+#include "Task.h"
 
 enum binState {
     EMPTY,
@@ -10,18 +11,23 @@ enum binState {
     EMPTYING
 };
 
-class WasteDetector {
+class WasteDetectorTask : public Task{
 
 private:
     int triggerPin;
     int echoPin;
     binState currentState;
+    bool isFull;
 
 public:
-    WasteDetector(int trig, int echo);
-    void begin();
+    WasteDetectorTask(int trig, int echo);
+    
+    void init();
+    void tick();
+
     binState getState();
     void setState(binState newState);
+
     long getDistance();
     bool isfull();
     void control();

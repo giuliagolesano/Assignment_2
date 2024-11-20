@@ -1,8 +1,10 @@
-#ifndef SERVOMOTOR_H
-#define SERVOMOTOR_H
+#ifndef DOORTASK_H
+#define DOORTASK_H
 
 #include <Arduino.h>
 #include <Servo.h>
+#include "Task.h"
+
 
 enum DoorState {
     DOOR_CLOSED,
@@ -12,7 +14,7 @@ enum DoorState {
     DOOR_REVERSING
 };
 
-class ServoMotor {
+class DoorTask : public Task{
 
 private:
     Servo servo;
@@ -20,11 +22,11 @@ private:
     DoorState currentState;
 
 public:
-    ServoMotor(int pin);
+    DoorTask(int pin);
 
-    void begin();
+    void init() override;
+    void tick() override;
 
-    void update();
     DoorState getState();
     void setState(DoorState newState);
 

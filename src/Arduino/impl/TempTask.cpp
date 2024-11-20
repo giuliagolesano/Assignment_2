@@ -1,4 +1,4 @@
-#include "Temp.h"
+#include "TempTask.h"
 
 #define MAXTEMP 40
 #define MAXTEMPTIME 5000
@@ -6,30 +6,32 @@
 /*
 * Constructor.
 */
-Temp::Temp(int p) {
-    pin=p;
-    currentState = OKAY;
-    dangerStartTime = 0;
+TempTask::TempTask(int p) {
+    this->pin=p;
+    this->currentState = OKAY;
+    this->dangerStartTime = 0;
+    this->currentTemperature = 0.0;
 }
 
 /*
 * Method to initialize the temperature sensor.
 */
-void Temp::begin() {
+void TempTask::init() {
     pinMode(pin, INPUT);
 }
 
 /*
 * Method to get the temperature.
 */
-float Temp::getTemperature() {
-    int rawValue = analogRead(pin);
-    float voltage = rawValue * (5.0 / 1023.0);
-    return (voltage - 0.5) * 100;
+float TempTask::getTemperature() {
+    return currentTemperature;
 }
 
-void Temp::control() {
-    float currentTemp = getTemperature();
+void TempTask::tick() {
+    float currentTemp;
+    int rawValue = analogRead(pin);
+    float voltage = rawValue * (5.0 / 1023.0);
+    currentTemperature = (voltage - 0.5) * 100;
 
     if (currentTemp > MAXTEMP) {
         if (dangerStartTime == 0) {
@@ -46,17 +48,17 @@ void Temp::control() {
 /*
 * Method to get the state.
 */
-TempState Temp::getState() {
+TempState TempTask::getState() {
     return currentState;
 }
 
 /*
 * Method to set the state.
 */
-void Temp::setState(TempState newState) {
+void TempTask::setState(TempState newState) {
     currentState = newState;
 }
 
-bool Temp::isDanger() {
+bool TempTask::isDanger() {
     return currentState == DANGER;
 }
