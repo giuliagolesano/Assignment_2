@@ -11,9 +11,6 @@
 #include "WasteDetector.h"
 #include "Temp.h"
 
-// put function declarations here:
-//int myFunction(int, int);
-
 Button openButton(2);
 Button closeButton(3);
 Led greenLed(10);
@@ -29,7 +26,10 @@ unsigned long tsleep = 10000;
 unsigned long time;
 unsigned long T1 = 3000;
 unsigned long T2 = 1000;
+unsigned long T3 = 5000;
 bool sleep = false;
+bool emptyButton = false;
+bool restoreButton = false;
 
 void available();
 void wakeUp();
@@ -54,69 +54,76 @@ void setup() {
   startTime = millis();
 
   enableInterrupt(7, wakeUp, RISING);
-
 }
 
 void loop() {
-  
-  if(digitalRead(2) == HIGH) {
+  if(pir.isUserDetected()){
+    if(openButton.isPressed() && !wastedet.isfull() && !temp.isDanger()) {
     door.open();
-  }
-  if(digitalRead(3) == HIGH) {
-    door.setAngle(0);
+    wastedet.setState(FILLING);
+    wastedet.control();
+    temp.control();
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("PRESS CLOSE WHEN DONE");
+    time = millis();
+
+    if(closeButton.isPressed() || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
+      door.close();
+
+      if(wastedet.isfull()) {
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("CONTAINER FULL");
+        greenLed.off();
+        redLed.on();
+      }else if(temp.isDanger()){
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("PROBLEM DETECTED");
+        greenLed.off();
+        redLed.on();
+      }else{
+        lcd.clear();
+        lcd.setCursor(0,0);
+        lcd.print("WASTE RECEIVED");
+        delay(T2);
+        available();
+      }
+    }
   }
 
-  /*
-  if(pir.isUserDetected()){
-    if(sleep) {
-      wakeUp();
-    }
-    startTime = millis();
+  if(wastedet.isfull() && emptyButton) {
+    door.reverse();
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("EMPTYING");
+    delay(T3);
+    available();
+    wastedet.setState(EMPTY);
+  }
+
+  if(temp.isDanger() && restoreButton) {
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("RESTORING");
+    delay(T3);
+    available();
+    temp.setState(OKAY);
+  }
+
   }else{
     if(millis() - startTime >= tsleep){
       enterSleep();
     }
   }
 
- if(digitalRead(3) == HIGH && !wastedet.isfull() && pir.isUserDetected() && !temp.isDanger()) {
-  redLed.on();
-  door.open();
-  door.setState(DOOR_OPENING);
-
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("PRESS CLOSE WHEN DONE");
-  time = millis();
-  door.setState(DOOR_OPEN);
-
-  if(digitalRead(2) == HIGH || (millis() - time >= T1) || wastedet.isfull() || temp.isDanger()) {
-    redLed.off();
-    door.close();
-    door.setState(DOOR_CLOSING);
-
-    if(wastedet.isfull()) {
-      lcd.setCursor(0,0);
-      lcd.print("CONTAINER FULL");
-      greenLed.off();
-      redLed.on();
-    }else if(temp.isDanger()){
-      lcd.setCursor(0,0);
-      lcd.print("PROBLEM DETECTED");
-      greenLed.off();
-      redLed.on();
-    }else{
-      lcd.setCursor(0,0);
-      lcd.print("WASTE RECEIVED");
-      delay(T2);
-      door.setState(DOOR_CLOSED);
-    }
-  }
- }*/
 
 }
 
 void available() {
   greenLed.on();
+  lcd.clear();
   lcd.backlight();
   lcd.setCursor(0,0);
   lcd.print("PRESS OPEN TO ENTER WASTE");

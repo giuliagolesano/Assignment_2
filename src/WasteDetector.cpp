@@ -24,18 +24,21 @@ void WasteDetector::begin() {
 * Method to get the distance.
 */
 long WasteDetector::getDistance() {
-
     digitalWrite(triggerPin,LOW);
     delayMicroseconds(3);
     digitalWrite(triggerPin,HIGH);
     delayMicroseconds(5);
     digitalWrite(triggerPin,LOW);
-
     float tUS = pulseIn(echoPin, HIGH);
     float t = tUS / 1000.0 / 1000.0 / 2;
     float d = t*vs;
     return d;
+}
 
+void WasteDetector::control() {
+    if(getDistance() <= D1) {
+        setState(FULL);
+    }
 }
 
 /*
@@ -53,11 +56,6 @@ void WasteDetector::setState(binState newState) {
 }
 
 bool WasteDetector::isfull() {
-    if(getDistance() <= D1) {
-        setState(FULL);
-        return true;
-    }else{
-        return false;
-    }
+    return currentState == FULL;
 }
 

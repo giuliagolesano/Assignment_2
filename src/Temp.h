@@ -14,6 +14,7 @@ class Temp {
 private: 
     int pin;
     TempState currentState;
+    unsigned long dangerStartTime;
 
 public: 
     Temp(int p);
@@ -22,6 +23,7 @@ public:
     TempState getState();
     void setState(TempState newState);
     bool isDanger();
+    void control();
 };
 
 #endif

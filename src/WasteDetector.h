@@ -24,6 +24,7 @@ public:
     void setState(binState newState);
     long getDistance();
     bool isfull();
+    void control();
 };
 
 #endif
