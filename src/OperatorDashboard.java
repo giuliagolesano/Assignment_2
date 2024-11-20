@@ -11,7 +11,12 @@ public class OperatorDashboard {
     private PrintWriter output;
     private Scanner input;
 
+    private JFrame frame;
+    private JLabel tempLabel;
+    private JLabel wasteLevelLabel;
     private JLabel tempValueLabel;
+    private JLabel wasteImageLabel;
+    private JLabel gifLabel;
     private JProgressBar wasteLevelProgress;
     private JButton btnEmpty;
     private JButton btnRestore;
@@ -19,29 +24,64 @@ public class OperatorDashboard {
     public OperatorDashboard() {
         setupSerial();
 
-        JFrame frame = new JFrame("Smart Waste Disposal System");
+        frame = new JFrame("Smart Waste Disposal System");
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
+        frame.setResizable(false);
+        frame.getContentPane().setBackground(new Color(255, 248, 198));
 
         JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout());
+        topPanel.setBackground(new Color(204, 255, 204));
         btnEmpty = new JButton("Empty");
         btnRestore = new JButton("Restore");
-
+        btnEmpty.setBackground(new Color(255, 204, 204));
+        btnRestore.setBackground(new Color(255, 204, 204));
         btnEmpty.addActionListener(e -> sendCommand("EMPTY"));
         btnRestore.addActionListener(e -> sendCommand("RESTORE"));
-
         topPanel.add(btnEmpty);
         topPanel.add(btnRestore);
 
-        tempValueLabel = new JLabel("Temperature: 0.00 °C");
+        frame.add(topPanel, BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(1, 2));
+
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BorderLayout());
+        leftPanel.setBackground(new Color(255, 248, 198));
+        tempLabel = new JLabel("Temperature reached:");
+        tempValueLabel = new JLabel("0.00 °C");
+
+        gifLabel = new JLabel(new ImageIcon("temp.png"));
+        gifLabel.setOpaque(true);
+        gifLabel.setBackground(new Color(255, 248, 198)); 
+
+        leftPanel.add(tempLabel, BorderLayout.NORTH);
+        leftPanel.add(tempValueLabel, BorderLayout.CENTER);
+        leftPanel.add(gifLabel, BorderLayout.SOUTH);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BorderLayout());
+        rightPanel.setBackground(new Color(255, 248, 198));
+        wasteLevelLabel = new JLabel("Waste Level: ");
         wasteLevelProgress = new JProgressBar(0, 100);
         wasteLevelProgress.setValue(0);
         wasteLevelProgress.setStringPainted(true);
 
-        frame.add(tempValueLabel, BorderLayout.WEST);
-        frame.add(wasteLevelProgress, BorderLayout.CENTER);
-        frame.add(topPanel, BorderLayout.SOUTH);
+        wasteImageLabel = new JLabel(new ImageIcon("liquid.png"));
+        wasteImageLabel.setOpaque(true);
+        wasteImageLabel.setBackground(new Color(255, 248, 198)); 
+
+        rightPanel.add(wasteLevelLabel, BorderLayout.NORTH);
+        rightPanel.add(wasteLevelProgress, BorderLayout.CENTER);
+        rightPanel.add(wasteImageLabel, BorderLayout.SOUTH);
+
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
+ 
+        frame.add(mainPanel, BorderLayout.CENTER);
 
         frame.setVisible(true);
 

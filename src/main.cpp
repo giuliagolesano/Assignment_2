@@ -32,8 +32,6 @@ unsigned long T1 = 3000;
 unsigned long T2 = 1000;
 unsigned long T3 = 5000;
 bool sleep = false;
-bool emptyButton = false;
-bool restoreButton = false;
 
 void available();
 void wakeUp();
@@ -67,7 +65,7 @@ void loop() {
     Serial.print("TEMP:");
     Serial.print(temp.getTemperature());
     Serial.print(";WASTE:");
-    Serial.println(wastedet.getLevel());
+    Serial.println(wastedet.getDistance());
 
     if (Serial.available() > 0) {
         String command = Serial.readStringUntil('\n');
@@ -93,7 +91,6 @@ void loop() {
         }
     }
 
-    // Logica esistente per sleep e gestione della porta
     if (pir.isUserDetected()) {
         if (openButton.isPressed() && !wastedet.isfull() && !temp.isDanger()) {
             door.open();
